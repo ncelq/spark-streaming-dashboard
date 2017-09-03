@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="./nvd3/nv.d3.css" rel="stylesheet" type="text/css">
+    <link href="./css/chart.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="./nvd3/nv.d3.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./lib/stream_layers.js"></script>
+    <script src="./js/chart4.js"></script>
+    <script src="./js/chart1.js"></script>
+    <script src="./js/chart2.js"></script>
+    <script src="./js/chart3.js"></script>
+    <script src="./js/table1.js"></script>
+</head>
+<body>
+
+
+  
+
+
+  <div id="chart1" class='with-3d-shadow with-transitions'>
+      <svg></svg>
+  </div>
+  <!--<svg id="chart1" class="mypiechart"></svg>-->
+
+<div class="container" style="width:600px">
+    <table id="table1" class="table">
+    <thead>
+        <tr>
+            <th data-field="tweet">Message</th>
+            <th data-field="view" data-formatter="priceFormatter" data-width="80">View</th>
+        </tr>
+    </thead>
+</table>
+</div>
+<div id="chart2" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+</div>
+<div id="chart3" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+</div>
+<div id="chart4" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+</div>
+
+
+</body>
+</html>
