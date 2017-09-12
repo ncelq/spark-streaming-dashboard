@@ -1,63 +1,80 @@
 
-    var long_short_data = [
+    var chartdata2 = [
         {
-            key: 'Series1',
+            key: 'Bullish',
             values: [
                 {
-                    "label" : "Group A" ,
-                    "value" : -1.8746444827653
+                    "label" : "fb" ,
+                    "value" : 0
                 } ,
                 {
-                    "label" : "Group B" ,
-                    "value" : -8.0961543492239
+                    "label" : "nflx" ,
+                    "value" : 0
                 } ,
                 {
-                    "label" : "Group C" ,
-                    "value" : -0.57072943117674
+                    "label" : "amzn" ,
+                    "value" : 0
                 }
             ]
         },
         {
-            key: 'Series2',
+            key: 'Bearish',
             values: [
-                {
-                    "label" : "Group A" ,
-                    "value" : 25.307646510375
-                } ,
-                {
-                    "label" : "Group B" ,
-                    "value" : 16.756779544553
-                } ,
-                {
-                    "label" : "Group C" ,
-                    "value" : 18.451534877007
-                }
+              {
+                  "label" : "fb" ,
+                  "value" : 0
+              } ,
+              {
+                  "label" : "nflx" ,
+                  "value" : 0
+              } ,
+              {
+                  "label" : "amzn" ,
+                  "value" : 0
+              }
             ]
         }
     ];
-    var chart;
-    var height = 300;
-    var width = 400;
+    var chart2;
+
     nv.addGraph(function() {
-        chart = nv.models.multiBarHorizontalChart()
+        chart2 = nv.models.multiBarHorizontalChart()
             .x(function(d) { return d.label })
             .y(function(d) { return d.value })
-            .width(width)
-            .height(height)
+
             .barColor(d3.scale.category10().range())
             .duration(250)
-            .margin({left: 100})
-            .stacked(true);
-        chart.yAxis.tickFormat(d3.format(',.2f'));
-        chart.yAxis.axisLabel('Y Axis');
-        chart.xAxis.axisLabel('X Axis').axisLabelDistance(20);
+            .margin({left: 50})
+            .stacked(false);
+        chart2.yAxis.tickFormat(d3.format(',.2f'));
+        //chart2.yAxis.axisLabel('Number');
+        chart2.xAxis.axisLabel('X Axis').axisLabelDistance(20);
         d3.select('#chart2 svg')
-            .datum(long_short_data)
-            .call(chart);
-        nv.utils.windowResize(chart.update);
-        chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
-        chart.state.dispatch.on('change', function(state){
+            .datum(chartdata2)
+            .call(chart2);
+        nv.utils.windowResize(chart2.update);
+        chart2.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+        chart2.state.dispatch.on('change', function(state){
             nv.log('state', JSON.stringify(state));
         });
-        return chart;
+        return chart2;
+    });
+
+    socket.on('chart2', function(value){
+      var data= JSON.parse(value)
+      for (const entry of chartdata2.entries()) {
+        if(entry[1].key==data.key) {
+
+    for (const entry2 of entry[1].values.entries()) {
+      if (entry2[1].label==data.label) {
+        entry2[1].value = data.value
+      }
+    }
+        }
+      }
+
+      d3.select("#chart2 svg")
+          .datum(chartdata2)
+          .transition().duration(1200)
+          .call(chart2);
     });

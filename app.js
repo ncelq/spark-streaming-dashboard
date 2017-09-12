@@ -22,7 +22,7 @@ io.on('connection', function (socket) {
 var zkserver = 'localhost:2181'; // Kafka Server Address
 var kafka_client_id = 'reporting-layer';
 var kafkaClient = new kafka.Client(zkserver,kafka_client_id);
-var consumer = new kafka.Consumer(kafkaClient,[{ topic: 'chart1' }],{autoCommit: true});
+var consumer = new kafka.Consumer(kafkaClient,[{ topic: 'chart1' }, { topic: 'chart2' }, { topic: 'chart3' }, { topic: 'chart4' }],{autoCommit: true});
 
 consumer.on('message', function (message) {
   console.log("["+message.topic+"]: "+message.value);

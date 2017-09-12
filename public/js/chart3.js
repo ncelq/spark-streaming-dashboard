@@ -1,50 +1,75 @@
-nv.utils.symbolMap.set('thin-x', function(size) {
-       size = Math.sqrt(size);
-       return 'M' + (-size/2) + ',' + (-size/2) +
-               'l' + size + ',' + size +
-               'm0,' + -(size) +
-               'l' + (-size) + ',' + size;
-   });
+var chartdata3 = [
+    {
+        key: 'Bullish', values: []
+    },
+    {
+        key: 'Bearish', values: []
+    }
+];
+
    // create the chart
-   var chart;
+   var chart3;
    nv.addGraph(function() {
-       chart = nv.models.scatterChart()
+       chart3 = nv.models.scatterChart()
            .showDistX(true)
            .showDistY(true)
            .useVoronoi(true)
-           .color(d3.scale.category10().range())
+           .color(  [d3.rgb("green"), d3.rgb("red")] )
            .duration(300)
        ;
-       chart.dispatch.on('renderEnd', function(){
+       chart3.dispatch.on('renderEnd', function(){
            console.log('render complete');
        });
-       chart.xAxis.tickFormat(d3.format('.02f'));
-       chart.yAxis.tickFormat(d3.format('.02f'));
+       //chart3.xAxis.tickFormat(formatDateTick).axisLabel('Time');
+       chart3.xAxis.tickFormat(
+         function(d) {
+          return d3.time.format('%H:%M')(new Date(d))
+        }
+       ).axisLabel('Time');
+       chart3.xScale(d3.time.scale.utc());
+
+       chart3.yAxis.tickFormat(d3.format('')).axisLabel('Count');
        d3.select('#chart3 svg')
-           .datum(randomData(4,40))
-           .call(chart);
-       nv.utils.windowResize(chart.update);
-       chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
-       return chart;
+           .datum(chartdata3)
+           .call(chart3);
+       nv.utils.windowResize(chart3.update);
+       chart3.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
+       return chart3;
    });
-   function randomData(groups, points) { //# groups,# points per group
-       // smiley and thin-x are our custom symbols!
-       var data = [],
-           shapes = ['thin-x', 'circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
-           random = d3.random.normal();
-       for (i = 0; i < groups; i++) {
-           data.push({
-               key: 'Group ' + i,
-               values: []
-           });
-           for (j = 0; j < points; j++) {
-               data[i].values.push({
-                   x: random(),
-                   y: random(),
-                   size: Math.round(Math.random() * 100) / 100,
-                   shape: shapes[j % shapes.length]
-               });
+
+
+
+       socket.on('chart3', function(value){
+         var data= JSON.parse(value)
+         for (const entry of chartdata3.entries()) {
+           if(entry[1].key==data.key) {
+             var iso = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%L+08:00");
+             var date = iso.parse(data.created_at.start);
+             for (var i =0; i < entry[1].values.length; i++)
+
+             if (entry[1].values[i].x-date==0) {
+                entry[1].values.splice(i,1);
+                break;
+             }
+             entry[1].values.push({x:date,y:data.count,size:data.count,sharp:'circle'})
+
+
            }
-       }
-       return data;
-   }
+         }
+
+         d3.select("#chart3 svg")
+             .datum(chartdata3)
+             .transition().duration(1200)
+             .call(chart3);
+       });
+
+
+       function formatDateTick(time) {
+         //
+         var iso = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%L+08:00");
+                  console.log(time)
+         var date = iso.parse(time);
+
+
+         return d3.time.format('%H:%M')(new Date(time));
+       };
